@@ -35,26 +35,33 @@ jobs:
               --upgrade pip \
               docker-compose==1.15.0 \
               awscli==1.11.76
-      - run:
-          name: docker build
-          command: |
-            docker-compose build
+      # - run:
+      #     name: docker build
+      #     command: |
+      #       docker-compose build
       - deploy:
-          name: Push application Docker image
+          name: Pull application Docker image
           command: |
             docker login -u $DOCKER_HUB_USER_ID -p $DOCKER_HUB_PWD
             docker pull $DOCKER_HUB_USER_ID/udagram-frontend:local
-            docker pull $DOCKER_HUB_USER_ID/udagram-reverseproxy:latest
             docker pull $DOCKER_HUB_USER_ID/udagram-api-user:latest
             docker pull $DOCKER_HUB_USER_ID/udagram-api-feed:latest
+            docker pull $DOCKER_HUB_USER_ID/udagram-reverseproxy:latest
       - run:
-          name: docker up
+          name: docker build
+          command: |
+            docker build -t udagram-frontend .
+            docker build -t udagram-api-user .
+            docker build -t udagram-api-feed .
+            docker build -t udagram-reverseproxy .
+      - run:
+          name: docker ps
           command: |
             docker ps
       - run:
           name: docker run
           command: |
             docker run -p 8100:80 udagram-frontend
-            docker run -p 8100:80 udagram-reverseproxy
-            docker run -p 8100:80 udagram-api-user
-            docker run -p 8100:80 udagram-api-feed
+            docker run -p udagram-api-user
+            docker run -p udagram-api-feed
+            docker run -p 8080:8080 udagram-reverseproxy
