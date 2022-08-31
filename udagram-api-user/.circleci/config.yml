@@ -1,0 +1,52 @@
+version: 2.1
+workflows:
+  env-vars:
+    jobs:
+      - build:
+          context: udagram
+jobs:
+  build:
+    working_directory: /udagram-api-user
+    docker:
+      - image: docker:17.05.0-ce-git
+        auth:
+          username: $DOCKER_HUB_USER_ID
+          password: $DOCKER_HUB_PWD
+        environment:
+          POSTGRES_USERNAME: postgres
+          POSTGRES_PASSWORD: 2kuljones
+          POSTGRES_HOST: udagram-database.c6l2kjupeisc.us-east-2.rds.amazonaws.com
+          POSTGRES_DB: udagram
+          AWS_BUCKET: arn:aws:s3:::udagram-115477439975
+          AWS_REGION: us-east-2
+          AWS_PROFILE: admin
+          JWT_SECRET: testing
+          URL: http://localhost:8100
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --no-cache \
+              py-pip=9.0.0-r1
+            pip install \
+              docker-compose==1.15.0 \
+              awscli==1.11.76
+      - run:
+          name: docker build
+          command: |
+            docker build -t udagram-api-user .
+      - deploy:
+          name: Push application Docker image
+          command: |
+            docker login -u $DOCKER_HUB_USER_ID -p $DOCKER_HUB_PWD
+            docker tag udagram-api-user $DOCKER_HUB_USER_ID/udagram-api-user:$CIRCLE_SHA1
+            docker tag udagram-api-user $DOCKER_HUB_USER_ID/udagram-api-user:latest
+            docker push $DOCKER_HUB_USER_ID/udagram-api-user:$CIRCLE_SHA1
+            docker push $DOCKER_HUB_USER_ID/udagram-api-user:latest
+      - run:
+          name: docker run
+          command: |
+            docker run -p 8100:80 udagram-api-user
