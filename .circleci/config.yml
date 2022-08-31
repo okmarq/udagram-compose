@@ -36,26 +36,13 @@ jobs:
               docker-compose==1.15.0 \
               awscli==1.11.76
       - run:
-          name: directory
-          command: |
-            ls -a
-      # - run:
-      #     name: source
-      #     command: |
-      #       source set_env.sh
-      - run:
-          name: echo
-          command: |
-            echo $POSTGRES_USERNAME
-            echo $URL
-      - run:
           name: docker prune
           command: |
             docker image prune --all
       - run:
           name: docker build
           command: |
-            docker-compose build --parallel
+            docker-compose build docker-compose-build.yaml
       - deploy:
           name: Push application Docker image
           command: |
