@@ -44,6 +44,10 @@ jobs:
           command: |
             docker-compose build
       - run:
+          name: docker up
+          command: |
+            docker-compose up
+      - run:
           name: docker ps
           command: |
             docker ps
