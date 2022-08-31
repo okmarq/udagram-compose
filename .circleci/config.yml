@@ -35,7 +35,7 @@ jobs:
               --upgrade pip \
               docker-compose==1.15.0 \
               awscli==1.11.76 \
-              --upgrade docker-compose \
+              # --upgrade docker-compose \
               --upgrade awscli
       - run:
           name: docker
