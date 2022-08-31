@@ -43,11 +43,18 @@ jobs:
           name: Push application Docker image
           command: |
             docker login -u $DOCKER_HUB_USER_ID -p $DOCKER_HUB_PWD
-            docker pull $DOCKER_HUB_USER_ID/udagram-api-user:latest
-            docker pull $DOCKER_HUB_USER_ID/udagram-api-feed:latest
             docker pull $DOCKER_HUB_USER_ID/udagram-frontend:local
             docker pull $DOCKER_HUB_USER_ID/udagram-reverseproxy:latest
+            docker pull $DOCKER_HUB_USER_ID/udagram-api-user:latest
+            docker pull $DOCKER_HUB_USER_ID/udagram-api-feed:latest
       - run:
           name: docker up
           command: |
-            docker-compose up
+            docker ps
+      - run:
+          name: docker run
+          command: |
+            docker run -p 8100:80 udagram-frontend
+            docker run -p 8100:80 udagram-reverseproxy
+            docker run -p 8100:80 udagram-api-user
+            docker run -p 8100:80 udagram-api-feed
