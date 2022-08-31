@@ -33,10 +33,10 @@ jobs:
               py-pip=9.0.0-r1
             pip install \
               docker-compose==1.15.0 \
-              awscli==1.11.76
+              awscli==1.11.76 \
               --upgrade pip \
-                docker-compose \
-                awscli
+              --upgrade docker-compose \
+              --upgrade awscli
       - run:
           name: docker
           command: |
