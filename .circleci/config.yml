@@ -39,21 +39,28 @@ jobs:
       #     name: docker build
       #     command: |
       #       docker-compose build
-      - deploy:
-          name: Pull application Docker image
+      # - deploy:
+      #     name: Pull application Docker image
+      #     command: |
+      #       docker login -u $DOCKER_HUB_USER_ID -p $DOCKER_HUB_PWD
+      #       docker pull $DOCKER_HUB_USER_ID/udagram-frontend:local
+      #       docker pull $DOCKER_HUB_USER_ID/udagram-api-user:latest
+      #       docker pull $DOCKER_HUB_USER_ID/udagram-api-feed:latest
+      #       docker pull $DOCKER_HUB_USER_ID/udagram-reverseproxy:latest
+      - run:
+          name: docker file
           command: |
-            docker login -u $DOCKER_HUB_USER_ID -p $DOCKER_HUB_PWD
-            docker pull $DOCKER_HUB_USER_ID/udagram-frontend:local
-            docker pull $DOCKER_HUB_USER_ID/udagram-api-user:latest
-            docker pull $DOCKER_HUB_USER_ID/udagram-api-feed:latest
-            docker pull $DOCKER_HUB_USER_ID/udagram-reverseproxy:latest
+            cat  ./udagram-frontend/Dockerfile
+            cat  ./udagram-api-user/Dockerfile
+            cat  ./udagram-api-feed/Dockerfile
+            cat  ./udagram-reverseproxy/Dockerfile
       - run:
           name: docker build
           command: |
-            docker build -f udagram-frontend ./udagram-frontend
-            docker build -f udagram-api-user ./udagram-api-user
-            docker build -f udagram-api-feed ./udagram-api-feed
-            docker build -f udagram-reverseproxy ./udagram-reverseproxy
+            docker build -f udagram-frontend ./udagram-frontend/Dockerfile -t .
+            docker build -f udagram-api-user ./udagram-api-user/Dockerfile -t .
+            docker build -f udagram-api-feed ./udagram-api-feed/Dockerfile -t .
+            docker build -f udagram-reverseproxy ./udagram-reverseproxy/Dockerfile -t .
       - run:
           name: docker ps
           command: |
