@@ -12,16 +12,16 @@ jobs:
         auth:
           username: $DOCKER_HUB_USER_ID
           password: $DOCKER_HUB_PWD
-        # environment:
-        #   POSTGRES_USERNAME: postgres
-        #   POSTGRES_PASSWORD: 2kuljones
-        #   POSTGRES_HOST: udagram-database.c6l2kjupeisc.us-east-2.rds.amazonaws.com
-        #   POSTGRES_DB: udagram
-        #   AWS_BUCKET: arn:aws:s3:::udagram-115477439975
-        #   AWS_REGION: us-east-2
-        #   AWS_PROFILE: admin
-        #   JWT_SECRET: testing
-        #   URL: http://localhost:8100
+        environment:
+          POSTGRES_USERNAME: $postgres
+          POSTGRES_PASSWORD: $2kuljones
+          POSTGRES_HOST: $udagram-database.c6l2kjupeisc.us-east-2.rds.amazonaws.com
+          POSTGRES_DB: $udagram
+          AWS_BUCKET: $arn:aws:s3:::udagram-115477439975
+          AWS_REGION: $us-east-2
+          AWS_PROFILE: $admin
+          JWT_SECRET: $testing
+          URL: $http://localhost:8100
     steps:
       - checkout
       - setup_remote_docker:
