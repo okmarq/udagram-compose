@@ -42,7 +42,7 @@ jobs:
       - run:
           name: docker build
           command: |
-            docker-compose build docker-compose-build.yaml
+            docker-compose build
       - deploy:
           name: Push application Docker image
           command: |
