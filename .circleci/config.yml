@@ -36,10 +36,6 @@ jobs:
               docker-compose==1.15.0 \
               awscli==1.11.76
       - run:
-          name: docker prune
-          command: |
-            docker image prune --all
-      - run:
           name: docker build
           command: |
             docker-compose build
@@ -47,24 +43,10 @@ jobs:
           name: Push application Docker image
           command: |
             docker login -u $DOCKER_HUB_USER_ID -p $DOCKER_HUB_PWD
-            docker tag udagram-api-user $DOCKER_HUB_USER_ID/udagram-api-user:$CIRCLE_SHA1
-            docker tag udagram-api-user $DOCKER_HUB_USER_ID/udagram-api-user:latest
-            docker push $DOCKER_HUB_USER_ID/udagram-api-user:$CIRCLE_SHA1
-            docker push $DOCKER_HUB_USER_ID/udagram-api-user:latest
-            docker tag udagram-api-feed $DOCKER_HUB_USER_ID/udagram-api-feed:$CIRCLE_SHA1
-            docker tag udagram-api-feed $DOCKER_HUB_USER_ID/udagram-api-feed:latest
-            docker push $DOCKER_HUB_USER_ID/udagram-api-feed:$CIRCLE_SHA1
-            docker push $DOCKER_HUB_USER_ID/udagram-api-feed:latest
-            docker tag udagram-frontend $DOCKER_HUB_USER_ID/udagram-frontend:$CIRCLE_SHA1
-            docker tag udagram-frontend $DOCKER_HUB_USER_ID/udagram-frontend:latest
-            docker tag udagram-frontend $DOCKER_HUB_USER_ID/udagram-frontend:local
-            docker push $DOCKER_HUB_USER_ID/udagram-frontend:$CIRCLE_SHA1
-            docker push $DOCKER_HUB_USER_ID/udagram-frontend:latest
-            docker push $DOCKER_HUB_USER_ID/udagram-frontend:local
-            docker tag udagram-reverseproxy $DOCKER_HUB_USER_ID/udagram-reverseproxy:$CIRCLE_SHA1
-            docker tag udagram-reverseproxy $DOCKER_HUB_USER_ID/udagram-reverseproxy:latest
-            docker push $DOCKER_HUB_USER_ID/udagram-reverseproxy:$CIRCLE_SHA1
-            docker push $DOCKER_HUB_USER_ID/udagram-reverseproxy:latest
+            docker pull $DOCKER_HUB_USER_ID/udagram-api-user:latest
+            docker pull $DOCKER_HUB_USER_ID/udagram-api-feed:latest
+            docker pull $DOCKER_HUB_USER_ID/udagram-frontend:local
+            docker pull $DOCKER_HUB_USER_ID/udagram-reverseproxy:latest
       - run:
           name: docker up
           command: |
