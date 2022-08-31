@@ -30,14 +30,13 @@ jobs:
           name: Install dependencies
           command: |
             apk add --no-cache \
-                python3 \
-                # py-pip=9.0.0-r1
-              pip3 install \
-                # --upgrade pip \
+              py-pip=9.0.0-r1
+            pip install \
+              docker-compose==1.15.0 \
+              awscli==1.11.76
+              --upgrade pip \
                 docker-compose \
-                # docker-compose==1.26.2 \
                 awscli
-                # awscli==1.19.112
       - run:
           name: docker
           command: |
