@@ -44,13 +44,9 @@ jobs:
           command: |
             docker image prune --all
       - run:
-          name: found?
-          command: |
-            cat docker-compose-build.yaml
-      - run:
           name: docker build
           command: |
-            docker-compose -f docker-compose-build.yaml build --parallel
+            docker-compose build
       - run:
           name: docker up
           command: |
