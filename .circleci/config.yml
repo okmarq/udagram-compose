@@ -50,10 +50,10 @@ jobs:
       - run:
           name: docker build
           command: |
-            docker build -f ./udagram-frontend/Dockerfile https://github.com/okmarq/udagram-frontend.git
-            docker build -f ./udagram-api-user/Dockerfile https://github.com/okmarq/udagram-api-user.git
-            docker build -f ./udagram-api-feed/Dockerfile https://github.com/okmarq/udagram-api-feed.git
-            docker build -f ./udagram-reverseproxy/Dockerfile https://github.com/okmarq/udagram-reverseproxy.git
+            docker build -f udagram-frontend/Dockerfile https://github.com/okmarq/udagram-frontend.git
+            docker build -f udagram-api-user/Dockerfile https://github.com/okmarq/udagram-api-user.git
+            docker build -f udagram-api-feed/Dockerfile https://github.com/okmarq/udagram-api-feed.git
+            docker build -f udagram-reverseproxy/Dockerfile https://github.com/okmarq/udagram-reverseproxy.git
       - run:
           name: docker ps
           command: |
