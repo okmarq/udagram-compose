@@ -31,8 +31,8 @@ jobs:
           command: |
             apk add --no-cache \
                 python3 \
-                py-pip=9.0.0-r1
-                py3-pip
+                # py-pip=9.0.0-r1
+                # py3-pip
               pip3 install \
                 # --upgrade pip \
                 docker-compose \
