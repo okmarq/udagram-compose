@@ -29,6 +29,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
+            apk add python3
             apk add --no-cache \
                 py-pip=9.0.0-r1
               pip install \
