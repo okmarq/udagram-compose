@@ -34,21 +34,7 @@ jobs:
             pip install \
               --upgrade pip \
               docker-compose==1.15.0 \
-              awscli==1.11.76 \
-              # --upgrade docker-compose \
-              # --upgrade awscli
-      - run:
-          name: docker
-          command: |
-            docker --version
-      - run:
-          name: docker-compose
-          command: |
-            docker-compose --version
-      - run:
-          name: aws
-          command: |
-            aws --version
+              awscli==1.11.76
       - run:
           name: directory
           command: |
