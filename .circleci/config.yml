@@ -57,10 +57,10 @@ jobs:
       - run:
           name: docker build
           command: |
-            docker build -f ./udagram-frontend/Dockerfile -t .
-            docker build -f ./udagram-api-user/Dockerfile -t .
-            docker build -f ./udagram-api-feed/Dockerfile -t .
-            docker build -f ./udagram-reverseproxy/Dockerfile -t .
+            docker build -f ./udagram-frontend/Dockerfile
+            docker build -f ./udagram-api-user/Dockerfile
+            docker build -f ./udagram-api-feed/Dockerfile
+            docker build -f ./udagram-reverseproxy/Dockerfile
       - run:
           name: docker ps
           command: |
