@@ -21,7 +21,8 @@ jobs:
             pip install \
               --upgrade pip \
               docker-compose==1.15.0 \
-              awscli==1.11.76
+              awscli==1.11.76 \
+              pyOpenSSL
       - run:
           name: ls
           command: |
