@@ -17,12 +17,12 @@ jobs:
           name: Install dependencies
           command: |
             apk add --no-cache \
+              openssl \
               py-pip=9.0.0-r1
             pip install \
               --upgrade pip \
               docker-compose==1.15.0 \
               awscli==1.11.76 \
-              pyopenssl
       - run:
           name: ls
           command: |
