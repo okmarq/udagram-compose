@@ -9,19 +9,6 @@ jobs:
     working_directory: /udagram-compose
     docker:
       - image: docker:17.05.0-ce-git
-        # auth:
-        #   username: $DOCKER_HUB_USER_ID
-        #   password: $DOCKER_HUB_PWD
-        # environment:
-        #   POSTGRES_USERNAME: postgres
-        #   POSTGRES_PASSWORD: 2kuljones
-        #   POSTGRES_HOST: udagram-database.c6l2kjupeisc.us-east-2.rds.amazonaws.com
-        #   POSTGRES_DB: udagram
-        #   AWS_BUCKET: arn:aws:s3:::udagram-115477439975
-        #   AWS_REGION: us-east-2
-        #   AWS_PROFILE: admin
-        #   JWT_SECRET: testing
-        #   URL: http://localhost:8100
     steps:
       - checkout
       - setup_remote_docker:
@@ -36,40 +23,40 @@ jobs:
               docker-compose==1.15.0 \
               awscli==1.11.76
       - run:
-          name: docker prune
+          name: ls
           command: |
-            docker image prune --all
+            ls -a
       - run:
           name: docker build
           command: |
+            # docker build -f udagram-frontend/Dockerfile .
+            # docker build -f udagram-api-user/Dockerfile .
+            # docker build -f udagram-api-feed/Dockerfile .
+            # docker build -f udagram-reverseproxy/Dockerfile .
             docker-compose build
-      - run:
-          name: docker up
-          command: |
-            docker-compose up
       - run:
           name: docker ps
           command: |
             docker ps
-      # - deploy:
-      #     name: Push application Docker image
-      #     command: |
-      #       docker login -u $DOCKER_HUB_USER_ID -p $DOCKER_HUB_PWD
-      #       docker tag udagram-api-user $DOCKER_HUB_USER_ID/udagram-api-user:$CIRCLE_SHA1
-      #       docker tag udagram-api-user $DOCKER_HUB_USER_ID/udagram-api-user:latest
-      #       docker push $DOCKER_HUB_USER_ID/udagram-api-user:$CIRCLE_SHA1
-      #       docker push $DOCKER_HUB_USER_ID/udagram-api-user:latest
-      #       docker tag udagram-api-feed $DOCKER_HUB_USER_ID/udagram-api-feed:$CIRCLE_SHA1
-      #       docker tag udagram-api-feed $DOCKER_HUB_USER_ID/udagram-api-feed:latest
-      #       docker push $DOCKER_HUB_USER_ID/udagram-api-feed:$CIRCLE_SHA1
-      #       docker push $DOCKER_HUB_USER_ID/udagram-api-feed:latest
-      #       docker tag udagram-frontend $DOCKER_HUB_USER_ID/udagram-frontend:$CIRCLE_SHA1
-      #       docker tag udagram-frontend $DOCKER_HUB_USER_ID/udagram-frontend:latest
-      #       docker tag udagram-frontend $DOCKER_HUB_USER_ID/udagram-frontend:local
-      #       docker push $DOCKER_HUB_USER_ID/udagram-frontend:$CIRCLE_SHA1
-      #       docker push $DOCKER_HUB_USER_ID/udagram-frontend:latest
-      #       docker push $DOCKER_HUB_USER_ID/udagram-frontend:local
-      #       docker tag udagram-reverseproxy $DOCKER_HUB_USER_ID/udagram-reverseproxy:$CIRCLE_SHA1
-      #       docker tag udagram-reverseproxy $DOCKER_HUB_USER_ID/udagram-reverseproxy:latest
-      #       docker push $DOCKER_HUB_USER_ID/udagram-reverseproxy:$CIRCLE_SHA1
-      #       docker push $DOCKER_HUB_USER_ID/udagram-reverseproxy:latest
+      - deploy:
+          name: Push application Docker image
+          command: |
+            docker login -u $DOCKER_HUB_USER_ID -p $DOCKER_HUB_PWD
+            docker tag udagram-api-user $DOCKER_HUB_USER_ID/udagram-api-user:$CIRCLE_SHA1
+            docker tag udagram-api-user $DOCKER_HUB_USER_ID/udagram-api-user:latest
+            docker push $DOCKER_HUB_USER_ID/udagram-api-user:$CIRCLE_SHA1
+            docker push $DOCKER_HUB_USER_ID/udagram-api-user:latest
+            docker tag udagram-api-feed $DOCKER_HUB_USER_ID/udagram-api-feed:$CIRCLE_SHA1
+            docker tag udagram-api-feed $DOCKER_HUB_USER_ID/udagram-api-feed:latest
+            docker push $DOCKER_HUB_USER_ID/udagram-api-feed:$CIRCLE_SHA1
+            docker push $DOCKER_HUB_USER_ID/udagram-api-feed:latest
+            docker tag udagram-frontend $DOCKER_HUB_USER_ID/udagram-frontend:$CIRCLE_SHA1
+            docker tag udagram-frontend $DOCKER_HUB_USER_ID/udagram-frontend:latest
+            docker tag udagram-frontend $DOCKER_HUB_USER_ID/udagram-frontend:local
+            docker push $DOCKER_HUB_USER_ID/udagram-frontend:$CIRCLE_SHA1
+            docker push $DOCKER_HUB_USER_ID/udagram-frontend:latest
+            docker push $DOCKER_HUB_USER_ID/udagram-frontend:local
+            docker tag udagram-reverseproxy $DOCKER_HUB_USER_ID/udagram-reverseproxy:$CIRCLE_SHA1
+            docker tag udagram-reverseproxy $DOCKER_HUB_USER_ID/udagram-reverseproxy:latest
+            docker push $DOCKER_HUB_USER_ID/udagram-reverseproxy:$CIRCLE_SHA1
+            docker push $DOCKER_HUB_USER_ID/udagram-reverseproxy:latest
