@@ -1,0 +1,115 @@
+aws iam create-role --role-name myAmazonEKSClusterRole --assume-role-policy-document file://"eks-cluster-role-trust-policy.json"
+
+aws iam attach-role-policy --policy-arn arn:aws:iam::aws:policy/AmazonEKSClusterPolicy --role-name myAmazonEKSClusterRole
+
+can skip the above
+
+# Feel free to use the same/different flags as you like
+# Recommended: You can see many more flags using "eksctl create cluster --help" command.
+# For example, you can set the node instance type using --node-type flag
+eksctl create cluster --name udagram-cluster --region us-east-1 --version 1.23 --vpc-private-subnets subnet-ExampleID1,subnet-ExampleID2 --nodes-min=2 --nodes-max=3
+
+kubectl get svc
+
+aws ec2 create-key-pair --key-name my-key-pair --key-type rsa --key-format pem --query "KeyMaterial" --output text > my-key-pair.pem
+
+eksctl create nodegroup --cluster udagram-cluster --region us-east-1 --name udagram-node-group --node-type m5.large --nodes 2 --nodes-min 2 --nodes-max 3 --ssh-access --ssh-public-key my-key-pair
+
+
+kubectl get nodes
+
+cat ~/.aws/credentials | tail -n 5 | head -n 2 | base64
+
+echo "$@2Kuljones" | base64
+
+echo "bWVnYV9zZWNyZXRfa2V5Cg==" | base64 -d
+
+kubectl apply -f aws-secret.yaml
+kubectl apply -f env-secret.yaml
+kubectl apply -f env-configmap.yaml
+
+kubectl apply -f feed-deployment.yaml
+kubectl apply -f feed-service.yaml
+
+kubectl apply -f user-deployment.yaml
+kubectl apply -f user-service.yaml
+
+kubectl apply -f frontend-deployment.yaml
+kubectl apply -f frontend-service.yaml
+
+kubectl apply -f reverseproxy-deployment.yaml
+kubectl apply -f reverseproxy-service.yaml
+
+
+# Check the deployment names and their pod status
+kubectl get deployments
+
+# Create a Service object that exposes the frontend deployment
+# The command below will ceates an external load balancer and assigns a fixed, external IP to the Service.
+kubectl expose deployment udagram-frontend --type=LoadBalancer --name=publicfrontend
+kubectl expose deployment udagram-reverseproxy --type=LoadBalancer --name=publicreverseproxy
+
+# Repeat the process for the *reverseproxy* deployment.
+# Check name, ClusterIP, and External IP of all deployments
+kubectl get services
+kubectl get pods
+# It should show the STATUS as Running
+
+#publicfrontend
+a1cada22713b64a65a6806e3c1819467-64050762.us-east-1.elb.amazonaws.com
+
+#publicreverseproxy
+a7ac4d99b8d93431aba3bf2a179b14ae-452380603.us-east-1.elb.amazonaws.com
+
+# Run these commands from the /udagram-deployment directory
+# Rolling update the containers of "frontend" deployment
+kubectl set image deployment udagram-frontend udagram-frontend=okmarq/udagram-frontend:v2
+
+kubectl set image deployment udagram-reverseproxy udagram-reverseproxy=okmarq/udagram-reverseproxy:v2
+
+
+kubectl describe pod udagram-api-feed-7cbd97d587-2kjp8
+kubectl describe pod udagram-api-user-8599b755cf-5hj8p
+kubectl describe pod udagram-api-frontend-554b77db6b-fvsfg
+kubectl describe pod udagram-reverseproxy-5b758888dd-gqlqb
+
+
+kubectl get pods
+kubectl logs [pod-name] -p
+# Once you increase the memory, check the updated deployment as:
+kubectl get pod [pod-name] --output=yaml
+# You can autoscale, if required, as
+kubectl autoscale deployment udagram-api-feed --cpu-percent=70 --min=3 --max=5
+kubectl autoscale deployment udagram-api-user --cpu-percent=70 --min=3 --max=5
+
+
+kubectl logs udagram-reverseproxy-5b758888dd-gqlqb -p
+
+
+kubectl get pods
+# Assuming "backend-feed-68d5c9fdd6-dkg8c" is a pod
+
+kubectl exec --stdin --tty <pod-name> -- bash
+kubectl exec --stdin --tty udagram-api-feed-75b45fd548-kksw6 -- bash
+kubectl exec --stdin --tty udagram-api-feed-75b45fd548-sg9m5 -- bash
+kubectl exec --stdin --tty udagram-api-user-65bfc7f8fd-clmqd -- bash
+kubectl exec --stdin --tty udagram-api-user-65bfc7f8fd-s2dgb -- bash
+kubectl exec --stdin --tty udagram-api-user-65bfc7f8fd-x7nt6 -- bash
+kubectl exec --stdin --tty udagram-frontend-6d5b57cff8-k9hrs -- bash
+kubectl exec --stdin --tty udagram-frontend-6d5b57cff8-kzdqk -- bash
+kubectl exec --stdin --tty udagram-reverseproxy-5b758888dd-8rnvx -- bash
+kubectl exec --stdin --tty udagram-reverseproxy-5b758888dd-gqlqb -- bash
+
+# See what values are set for environment variables in the container
+printenv | grep POST
+# Or, you can try "curl <cluster-IP-of-backend>:8080/api/v0/feed " to check if services are running.
+# This is helpful to see is backend is working by opening a bash into the frontend container
+
+
+#logs
+kubectl logs udagram-api-feed-75b45fd548-6r7vq -p
+kubectl logs udagram-api-feed-75b45fd548-kksw6
+kubectl logs udagram-api-feed-75b45fd548-sg9m5
+kubectl logs udagram-api-user-65bfc7f8fd-clmqd
+kubectl logs udagram-api-user-65bfc7f8fd-s2dgb
+kubectl logs udagram-api-user-65bfc7f8fd-x7nt6
