@@ -29,9 +29,7 @@ jobs:
           name: Push application Docker image
           command: |
             docker login -u $DOCKER_HUB_USER_ID -p $DOCKER_HUB_PWD
-            docker tag udagram-reverseproxy $DOCKER_HUB_USER_ID/udagram-reverseproxy:$CIRCLE_SHA1
             docker tag udagram-reverseproxy $DOCKER_HUB_USER_ID/udagram-reverseproxy:latest
             docker tag udagram-reverseproxy $DOCKER_HUB_USER_ID/udagram-reverseproxy:v2
-            docker push $DOCKER_HUB_USER_ID/udagram-reverseproxy:$CIRCLE_SHA1
             docker push $DOCKER_HUB_USER_ID/udagram-reverseproxy:latest
             docker push $DOCKER_HUB_USER_ID/udagram-reverseproxy:v2
